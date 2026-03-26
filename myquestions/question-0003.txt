@@ -1,1 +1,30 @@
+El Problema: Filtro Inteligente de Outliers con Isolation Forest
+En la vida real, los datos suelen venir contaminados con errores de sensor o fraudes. Tu tarea es construir una función que no solo identifique estas anomalías, sino que limpie el dataset y devuelva únicamente los índices de los registros que el modelo considera "normales" (inliers), basándose en un nivel de contaminación específico.
 
+Tu Misión:
+Escribe una función llamada limpiar_anomalias_entrenamiento(X, contaminacion) que realice lo siguiente:
+
+Configuración: Utiliza el algoritmo IsolationForest de sklearn.ensemble.
+
+Parámetros del Modelo: Configura el modelo con el nivel de contamination proporcionado y un random_state=42.
+
+Detección: Ajusta el modelo a la matriz X y predice las etiquetas de anomalía.
+
+Nota: Recuerda que IsolationForest devuelve 1 para datos normales y -1 para anomalías.
+
+Filtrado Numérico: Utiliza las capacidades de NumPy para obtener los índices de posición de todos los registros que fueron clasificados como normales (1).
+
+Resultado: La función debe devolver un array de NumPy con los índices (integers) de las filas "limpias".
+
+Especificaciones Técnicas:
+Nombre de la función: limpiar_anomalias_entrenamiento
+
+Argumentos:
+
+X (numpy.ndarray o pandas.DataFrame): La matriz de características a analizar.
+
+contaminacion (float): Un valor entre 0 y 0.5 que representa la proporción esperada de anomalías.
+
+Retorno:
+
+Un numpy.ndarray de una dimensión con los índices de las filas que no son anomalías.
