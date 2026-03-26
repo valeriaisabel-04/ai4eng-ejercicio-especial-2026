@@ -1,1 +1,32 @@
+El Problema: Selección Automatizada de Características por Importancia
+En muchos conjuntos de datos, existen columnas que no aportan información relevante (ruido). Una técnica común es entrenar un modelo basado en árboles (como un Bosque Aleatorio) para calcular la importancia de cada variable y seleccionar solo las mejores.
 
+Tu Misión:
+Escribe una función llamada seleccionar_y_predecir(X, y, k_top) que realice lo siguiente:
+
+Entrenamiento Inicial: Entrena un modelo de RandomForestClassifier (con n_estimators=100 y random_state=42) utilizando todos los datos de entrada X y y.
+
+Identificación de Importancias: Extrae las importancias de las características utilizando el atributo feature_importances_ del modelo entrenado.
+
+Selección: Identifica los índices de las k_top características más importantes (las que tengan los valores más altos).
+
+Filtrado: Crea una nueva matriz de características que contenga únicamente esas k_top columnas seleccionadas.
+
+Predicción Final: Entrena un nuevo modelo de RandomForestClassifier (mismos parámetros) pero esta vez usando solo la matriz filtrada.
+
+Resultado: La función debe devolver un array de Numpy con las predicciones finales de este segundo modelo sobre los mismos datos de entrenamiento filtrados.
+
+Especificaciones Técnicas:
+Nombre de la función: seleccionar_y_predecir
+
+Argumentos:
+
+X (numpy.ndarray o pandas.DataFrame): Matriz de características.
+
+y (numpy.ndarray): Vector de etiquetas (clases).
+
+k_top (int): Número de características a conservar.
+
+Retorno:
+
+Un numpy.ndarray (unidimensional) que contenga las predicciones (y_pred) del modelo final.
