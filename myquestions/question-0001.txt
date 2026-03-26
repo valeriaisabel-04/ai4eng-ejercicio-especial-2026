@@ -1,1 +1,36 @@
+El Problema: Evaluación de Error por Segmentos (Bias Analysis)
+En modelos de regresión, a veces el error no se distribuye de forma uniforme. Un modelo puede ser muy preciso para valores pequeños pero fallar drásticamente en valores grandes. Tu objetivo es crear una función que evalúe el desempeño de un modelo de regresión lineal, pero devolviendo el Error Cuadrático Medio (MSE) desglosado por la magnitud de la variable objetivo.
 
+Tu Misión:
+Escribe una función llamada evaluar_segmentos_regresion(df, target_col, threshold) que realice lo siguiente:
+
+División de Datos: Divide el DataFrame df en entrenamiento (80%) y prueba (20%) usando un random_state=42.
+
+Entrenamiento: Entrena un modelo de LinearRegression de sklearn con el conjunto de entrenamiento.
+
+Predicción: Genera predicciones para el conjunto de prueba.
+
+Segmentación: Divide el conjunto de prueba en dos grupos basados en el valor real de target_col:
+
+Grupo Bajo: Registros donde el valor real es menor o igual al threshold.
+
+Grupo Alto: Registros donde el valor real es mayor al threshold.
+
+Cálculo: Calcula el mean_squared_error para cada uno de los dos grupos por separado.
+
+Resultado: Devuelve un array de Numpy con exactamente dos elementos de tipo float: [mse_grupo_bajo, mse_grupo_alto].
+
+Especificaciones Técnicas:
+Nombre de la función: evaluar_segmentos_regresion
+
+Argumentos:
+
+df (pandas.DataFrame): El conjunto de datos completo.
+
+target_col (str): El nombre de la columna objetivo (continua).
+
+threshold (float): El valor de corte para segmentar los errores.
+
+Retorno:
+
+Un numpy.ndarray de forma (2,) que contenga los dos valores de MSE calculados.
