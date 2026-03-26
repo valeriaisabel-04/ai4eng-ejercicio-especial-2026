@@ -1,1 +1,28 @@
+El Problema: Optimización de Características y Reducción de Ruido
+En escenarios de Machine Learning con muchas variables (alta dimensionalidad), es común que algunas características contengan ruido o sean redundantes. Tu tarea es limpiar los datos y proyectarlos en un espacio de menor dimensión antes de devolver la varianza explicada, lo cual ayuda a entender cuánta información estamos reteniendo.
+
+Tu Misión:
+Escribe una función llamada optimizar_y_proyectar(df, target_col, n_components) que realice lo siguiente:
+Separación: Divide el DataFrame df en la matriz de características (X) y el vector objetivo (y) usando target_col.
+Limpieza: Imputa los valores faltantes en X utilizando la mediana de cada columna (usando SimpleImputer).
+Escalamiento: Aplica un escalado robusto a los datos (usando RobustScaler) para mitigar el efecto de posibles valores atípicos (outliers).
+Reducción: Aplica Análisis de Componentes Principales (PCA) para reducir las características al número de componentes especificado por n_components.
+Resultado: La función debe devolver la varianza explicada acumulada (un solo número flotante) que representan esos componentes.
+
+
+Especificaciones Técnicas:
+Nombre de la función: optimizar_y_proyectar
+
+Argumentos:
+
+df (pandas.DataFrame): El conjunto de datos original.
+
+target_col (str): Nombre de la columna que actúa como variable dependiente.
+
+n_components (int): Número de componentes principales a extraer.
+
+Retorno:
+
+Un float de Python que represente la suma de la razón de varianza explicada (explained_variance_ratio_).
+
 
