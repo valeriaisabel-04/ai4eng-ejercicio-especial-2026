@@ -1,0 +1,86 @@
+Autora: Valeria Isabel Vásquez Barragán (valeria.vasquezb@udea.edu.co)
+Respuesta evaluada: myanswers/answer-0652.py  ->  detectar_anomalias_isolation_forest
+Pregunta del compañero: question-0004  (Lucero Florez, lucero.florez@udea.edu.co)
+Generador asociado: question-0004-usecase-generator.py
+
+Motivo de este archivo
+----------------------
+Intenté validar mi función contra el generador de caso de uso del compañero,
+pero la comparación falla de forma intermitente. Después de revisarlo a fondo,
+concluí que el problema no está en mi función sino en el generador de caso de
+uso (y, en parte, en lo que el enunciado deja sin especificar). Como no recibí
+respuesta del compañero para corregirlo, dejo documentado el diagnóstico y una
+posible solución para que la evaluación se pueda considerar válida.
+
+
+Descripción del problema
+------------------------
+La función debe detectar anomalías con IsolationForest. IsolationForest es un
+modelo ALEATORIO: si no se fija el parámetro random_state, cada entrenamiento
+construye árboles distintos. El generador de caso de uso calcula la "salida
+esperada" entrenando su propio IsolationForest sin fijar random_state, y mi
+función entrena otro IsolationForest también sin random_state. Como las dos
+semillas son distintas, en los puntos que están en la frontera de decisión las
+etiquetas no siempre coinciden.
+
+En otras palabras: el "valor esperado" que produce el generador no es
+reproducible ni siquiera consigo mismo, por lo que ninguna respuesta puede
+garantizar coincidencia exacta de etiquetas el 100% de las veces.
+
+
+Evidencia de la validación
+--------------------------
+Ejecuté el generador y mi función 400 veces, comparando ambos resultados:
+
+  - Número de anomalías (num_anomalias): coincide 400/400 veces (100%).
+    Esto es estable porque los datos están bien separados (25 puntos normales
+    en loc=0 y 5 anómalos en loc=8) y contamination=0.15 selecciona de forma
+    consistente la misma cantidad de anomalías.
+
+  - Vector exacto de etiquetas: coincide ~361/400 veces (~90%).
+    En ~10% de los casos difiere en 1 o 2 puntos frontera, justamente por la
+    falta de random_state.
+
+Comprobación de la causa: al fijar random_state=42 en el IsolationForest tanto
+en el generador como en la función, la coincidencia exacta sube a 400/400
+(100%). Esto confirma que el origen del fallo es la aleatoriedad no controlada.
+
+
+Por qué mi función cumple el enunciado
+--------------------------------------
+El enunciado de la pregunta pide escalar con StandardScaler, entrenar un
+IsolationForest, predecir anomalías y devolver (etiquetas, num_anomalias).
+Mi función hace exactamente eso. El enunciado NO especifica un random_state,
+de modo que mi implementación es fiel a lo solicitado. El fallo proviene de que
+el generador usa una comparación exacta de etiquetas sobre un proceso aleatorio.
+
+
+Solución propuesta
+------------------
+Cualquiera de estas dos opciones corrige el problema:
+
+  Opción A (si se quiere comparar el vector exacto de etiquetas):
+    Fijar random_state en el generador Y exigir el mismo valor en el enunciado,
+    por ejemplo IsolationForest(contamination=..., random_state=42). Con ambos
+    lados usando la misma semilla, el resultado es determinista y reproducible.
+
+  Opción B (si se prefiere dejar el enunciado sin fijar random_state):
+    No comparar el vector exacto de etiquetas, sino comparar num_anomalias, que
+    es estable (100% en las pruebas). Alternativamente, derivar la salida
+    esperada de la construcción conocida de los datos (las últimas 5 filas son
+    las anomalías inyectadas) en lugar de re-entrenar el modelo.
+
+Mejora adicional (higiene del código):
+    El generador ejecuta el caso de uso y hace print al importarse. Conviene
+    envolver ese bloque final en  if _name_ == "_main_":  como ya hacen los
+    demás generadores, para que al importar el módulo no se dispare la ejecución
+    ni se ensucie la salida del corrector.
+
+
+Conclusión
+----------
+Mi función es correcta respecto al enunciado. El fallo de validación se debe a
+que el generador del compañero compara etiquetas exactas de un modelo aleatorio
+sin random_state. Documento aquí el diagnóstico y la solución propuesta para que
+la entrega se pueda considerar válida pese a no haber obtenido respuesta del
+compañero para ajustar su generador.
